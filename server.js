@@ -242,11 +242,12 @@ app.post("/api/suppliers/", (req, res, next) => {
         const { supplierName,
             address,
             joinedDate,
-            mobileNo
+            mobileNo,
+            live
         } = req.body;
 
-        var sql = 'INSERT INTO suppliers (supplierName, address, joinedDate, mobileNo) VALUES (?,?,?,?)'
-        var params = [supplierName, address, joinedDate, mobileNo]
+        var sql = 'INSERT INTO suppliers (supplierName, address, joinedDate, mobileNo, live) VALUES (?,?,?,?,?)'
+        var params = [supplierName, address, joinedDate, mobileNo, live]
         db.run(sql, params, function (err, result) {
 
             if (err) {
@@ -283,8 +284,58 @@ app.delete("/api/suppliers/deleteAll/:id", (req, res, next) => {
     }
 });
 
+app.post("/api/customers/", (req, res, next) => {
+
+    try {
+        var errors = []
+
+        if (!req.body) {
+            errors.push("An invalid input");
+        }
+
+        const {
+            name,
+            address,
+            email,
+            dateOfBirth,
+            gender,
+            age,
+            cardHolderName,
+            cardNumber,
+            expiryDate,
+            cvv,
+            timeStamp,
+        } = req.body;
+
+        var sql = 'INSERT INTO customers (name, address, email, dateOfBirth, gender, age, cardHolderName,cardNumber, expiryDate, cvv, timeStamp   ) VALUES (?,?,?,?,?,?,?,?,?,?,?)'
+        var params = [name, address, email, dateOfBirth, gender, age, cardHolderName, cardNumber, expiryDate, cvv, timeStamp]
+        db.run(sql, params, function (err, result) {
+
+            if (err) {
+                res.status(400).json({ "error": err.message })
+                return;
+            } else {
+                res.json({
+                    "message": "success",
+                    "data": req.body,
+                    "id": this.lastID
+                })
+            }
+
+        });
+    } catch (E) {
+
+        res.status(400).send(E);
+    }
+});
+
+
 
 // Root path
 app.get("/", (req, res, next) => {
     res.json({ "message": "University of Moratuwa" })
 });
+
+
+
+
