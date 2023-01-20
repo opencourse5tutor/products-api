@@ -59,7 +59,7 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             name text, 
             address text,
             emai text,
-            dateofbirth text,
+            dateofBirth text,
             gender text,
             age text,
             cardHolderName text,
