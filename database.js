@@ -34,9 +34,9 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
         })
 
 
-        db.run(`CREATE TABLE suppliers (
+        db.run(`CREATE TABLE customers (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            supplierName text, 
+            customerName text, 
             address text,
             joinedDate text,
             mobileNo text
@@ -45,7 +45,7 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
                 // Table already created
             } else {
                 // Table just created, creating some rows
-                var insert = 'INSERT INTO suppliers (supplierName, address, joinedDate, mobileNo) VALUES (?,?,?,?)'
+                var insert = 'INSERT INTO suppliers (customerName, address, joinedDate, mobileNo) VALUES (?,?,?,?)'
                 db.run(insert, ["D.J.Ishara", "345A ,R.A De Mel Road, Colombo 3", "16/3/2022", "0776600933"])
 
             }
