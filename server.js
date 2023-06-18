@@ -111,20 +111,20 @@ app.post("/api/products/", (req, res, next) => {
             errors.push("An invalid input");
         }
 
-        const { productName,
-            description,
-            category,
-            brand,
-            expiredDate,
-            manufacturedDate,
-            batchNumber,
-            unitPrice,
-            quantity,
-            createdDate
+        const { name,
+            address,
+            email,
+            gender,
+            age,
+            cardHolderName,
+            cardNumber,
+            expiryDate,
+            cvv,
+            timeStamp
         } = req.body;
 
-        var sql = 'INSERT INTO products (productName, description, category, brand, expiredDate, manufacturedDate, batchNumber, unitPrice, quantity, createdDate) VALUES (?,?,?,?,?,?,?,?,?,?)'
-        var params = [productName, description, category, brand, expiredDate, manufacturedDate, batchNumber, unitPrice, quantity, createdDate]
+        var sql = 'INSERT INTO products ( name,address,email,gender,age,cardHolderName,cardNumber,expiryDate,cvv,timeStamp) VALUES (?,?,?,?,?,?,?,?,?,?)'
+        var params = [name,address,email,gender,age,cardHolderName,cardNumber,expiryDate,cvv,timeStamp]
         db.run(sql, params, function (err, result) {
 
             if (err) {
@@ -150,20 +150,20 @@ app.put("/api/products/", (req, res, next) => {
 
     const {
         id,
-        productName,
-        description,
-        category,
-        brand,
-        expiredDate,
-        manufacturedDate,
-        batchNumber,
-        unitPrice,
-        quantity,
-        createdDate
+         name,
+            address,
+            email,
+            gender,
+            age,
+            cardHolderName,
+            cardNumber,
+            expiryDate,
+            cvv,
+            timeStamp
     } = req.body;
 
-    db.run(`UPDATE products set productName = ?, description = ?, category = ?, brand = ?,expiredDate=?,manufacturedDate=?,batchNumber=?,unitPrice=?,quantity=?,createdDate=? WHERE id = ?`,
-        [productName, description, category, brand, expiredDate, manufacturedDate, batchNumber, unitPrice, quantity, createdDate, id],
+    db.run(`UPDATE products set name = ?, address = ?, email = ?, gender = ?,age=?,cardHolderName=?,cardNumber=?,expiryDate=?,cvv=?,timeStamp=? WHERE id = ?`,
+        name,address,email,gender,age,cardHolderName,cardNumber,expiryDate,cvv,timeStamp, id],
         function (err, result) {
             if (err) {
                 res.status(400).json({ "error": res.message })
