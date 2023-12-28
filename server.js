@@ -20,6 +20,91 @@ app.listen(HTTP_PORT, () => {
     console.log("Server running on port %PORT%".replace("%PORT%", HTTP_PORT))
 });
 
+
+// Customer Post Method
+app.post("/api/customers/", (req, res, next) => {
+    try {
+      var errors = [];
+  
+      // Validation
+      const {
+        name,
+        address,
+        email,
+        dateOfBirth,
+        gender,
+        age,
+        cardHolderName,
+        cardNumber,
+        expiryDate,
+        cvv,
+        timestamp,
+      } = req.body;
+  
+      if (
+        !name ||
+        !address ||
+        !email ||
+        !dateOfBirth ||
+        !gender ||
+        !age ||
+        !cardHolderName ||
+        !cardNumber ||
+        !expiryDate ||
+        !cvv ||
+        !timestamp
+      ) {
+        errors.push("All fields are required.");
+      }
+  
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        errors.push("Invalid email address.");
+      }
+  
+      // Validate credit card number format (12 digits)
+      const cardNumberRegex = /^\d{12}$/;
+      if (!cardNumberRegex.test(cardNumber)) {
+        errors.push("Invalid credit card number. It should be 12 digits.");
+      }
+  
+      if (errors.length > 0) {
+        res.status(400).json({ error: errors.join(", ") });
+        return;
+      }
+  
+      var sql =
+        "INSERT INTO customer (name, address, email, dateOfBirth, gender, age, cardHolderName, cardNumber, expiryDate, cvv, timestamp) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+      var params = [
+        name,
+        address,
+        email,
+        dateOfBirth,
+        gender,
+        age,
+        cardHolderName,
+        cardNumber,
+        expiryDate,
+        cvv,
+        timestamp,
+      ];
+      db.run(sql, params, function (err, result) {
+        if (err) {
+          res.status(400).json({ error: err.message });
+          return;
+        } else {
+          res.status(201).json({
+            message: `Customer ${name} has registered`,
+            customerId: this.lastID,
+          });
+        }
+      });
+    } catch (E) {
+      res.status(400).send(E);
+    }
+  });
+  
 app.get("/api/products", (req, res, next) => {
     try {
         var sql = "select * from products"
