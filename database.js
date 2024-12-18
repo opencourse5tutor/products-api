@@ -51,6 +51,42 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             }
         })
 
+db.run(`CREATE TABLE customers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT, 
+            address TEXT,
+            email TEXT UNIQUE,
+            dateOfBirth TEXT,
+            gender TEXT,
+            age INTEGER,
+            cardHolderName TEXT,
+            cardNumber TEXT,
+            expiryDate TEXT,
+            cvv TEXT,
+            timeStamp TEXT
+        )`, (err) => {
+            if (err) {
+                // Table already created
+            } else {
+                // Table just created, inserting provided details
+                var insert = `INSERT INTO customers 
+                (name, address, email, dateOfBirth, gender, age, cardHolderName, cardNumber, expiryDate, cvv, timeStamp) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                db.run(insert, [
+                    "Bavithran", 
+                    "Jaffna", 
+                    "bavithran@gmail.com", 
+                    "1991.02.25", 
+                    "male", 
+                    28, 
+                    "Bavithran", 
+                    "102445217895", 
+                    "12/2022", 
+                    "246", 
+                    "2022-12-31 23:59:59"
+                ]);
+            }
+        });
 
 
     }
