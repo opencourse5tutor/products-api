@@ -283,6 +283,64 @@ app.delete("/api/suppliers/deleteAll/:id", (req, res, next) => {
     }
 });
 
+app.post('/api/register-customer', (req, res) => {
+    const {
+        name,
+        address,
+        email,
+        dateOfBirth,
+        gender,
+        age,
+        cardHolderName,
+        cardNumber,
+        expiryDate,
+        cvv,
+        timeStamp
+    } = req.body;
+
+    // Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Email Validation Regex
+    const cardNumberRegex = /^\d{12}$/; // Credit Card Number (12 digits)
+
+    if (!email || !emailRegex.test(email)) {
+        return res.status(400).json({ error: "Invalid email address." });
+    }
+
+    if (!cardNumber || !cardNumberRegex.test(cardNumber)) {
+        return res.status(400).json({ error: "Credit card number must be exactly 12 digits." });
+    }
+
+    // Insert into database
+    const insertQuery = `
+        INSERT INTO customers 
+        (name, address, email, dateOfBirth, gender, age, cardHolderName, cardNumber, expiryDate, cvv, timeStamp) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+    db.run(insertQuery, [
+        name,
+        address,
+        email,
+        dateOfBirth,
+        gender,
+        age,
+        cardHolderName,
+        cardNumber,
+        expiryDate,
+        cvv,
+        timeStamp
+    ], function (err) {
+        if (err) {
+            console.error('Error inserting customer record:', err.message);
+            return res.status(400).json({ error: "Failed to register customer." });
+        }
+
+        res.status(201).json({
+            message: "Customer registered successfully.",
+            customerId: this.lastID
+        });
+    });
+});
+
 
 // Root path
 app.get("/", (req, res, next) => {
